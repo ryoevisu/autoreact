@@ -107,7 +107,7 @@ def react():
         'reaction': data['reaction'].upper(),
         'cookie': data['cookie'],
         'link': data['link'],
-        'version': "2.1"
+        'version': "5.2.1"
     }
     
     headers = {
