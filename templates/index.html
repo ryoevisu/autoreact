@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Reaction Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        .reaction-btn {
+            transition: transform 0.2s;
+        }
+        .reaction-btn:hover {
+            transform: scale(1.1);
+        }
+        .loading {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-6">
+            <h1 class="text-3xl font-bold text-center mb-8 text-blue-600">Facebook Reaction Tool</h1>
+            
+            <div class="space-y-6">
+                <!-- Cookie Input -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Facebook Cookie</label>
+                    <textarea id="cookie" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                </div>
+
+                <!-- Link Input -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Facebook Post Link</label>
+                    <input type="text" id="link" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <!-- Reaction Buttons -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-3">Select Reaction</label>
+                    <div class="flex flex-wrap gap-4 justify-center">
+                        <button class="reaction-btn p-2 rounded-full hover:bg-gray-100" data-reaction="LIKE">👍</button>
+                        <button class="reaction-btn p-2 rounded-full hover:bg-gray-100" data-reaction="LOVE">❤️</button>
+                        <button class="reaction-btn p-2 rounded-full hover:bg-gray-100" data-reaction="CARE">🤗</button>
+                        <button class="reaction-btn p-2 rounded-full hover:bg-gray-100" data-reaction="HAHA">😄</button>
+                        <button class="reaction-btn p-2 rounded-full hover:bg-gray-100" data-reaction="WOW">😮</button>
+                        <button class="reaction-btn p-2 rounded-full hover:bg-gray-100" data-reaction="SAD">😢</button>
+                        <button class="reaction-btn p-2 rounded-full hover:bg-gray-100" data-reaction="ANGRY">😠</button>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button id="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center justify-center">
+                    <span class="material-icons mr-2">send</span>
+                    Submit Reaction
+                </button>
+
+                <!-- Status Display -->
+                <div id="status" class="mt-4 p-4 rounded-md hidden">
+                    <div class="flex items-center">
+                        <span class="material-icons mr-2"></span>
+                        <span class="status-message"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedReaction = null;
+
+        // Handle reaction button clicks
+        document.querySelectorAll('.reaction-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.reaction-btn').forEach(btn => {
+                    btn.classList.remove('ring-2', 'ring-blue-500');
+                });
+                button.classList.add('ring-2', 'ring-blue-500');
+                selectedReaction = button.dataset.reaction;
+            });
+        });
+
+        // Handle form submission
+        document.getElementById('submit').addEventListener('click', async () => {
+            const cookie = document.getElementById('cookie').value;
+            const link = document.getElementById('link').value;
+            const statusDiv = document.getElementById('status');
+            const statusIcon = statusDiv.querySelector('.material-icons');
+            const statusMessage = statusDiv.querySelector('.status-message');
+
+            if (!cookie || !link || !selectedReaction) {
+                showStatus('error', 'Please fill in all fields and select a reaction');
+                return;
+            }
+
+            try {
+                // Show loading state
+                document.getElementById('submit').disabled = true;
+                document.getElementById('submit').innerHTML = '<span class="material-icons loading">refresh</span> Processing...';
+
+                const response = await fetch('/react', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        cookie,
+                        link,
+                        reaction: selectedReaction
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showStatus('success', 'Reaction submitted successfully!');
+                } else {
+                    showStatus('error', data.error || 'An error occurred');
+                }
+            } catch (error) {
+                showStatus('error', 'Network error occurred');
+            } finally {
+                // Reset submit button
+                document.getElementById('submit').disabled = false;
+                document.getElementById('submit').innerHTML = '<span class="material-icons mr-2">send</span> Submit Reaction';
+            }
+        });
+
+        function showStatus(type, message) {
+            const statusDiv = document.getElementById('status');
+            const statusIcon = statusDiv.querySelector('.material-icons');
+            const statusMessage = statusDiv.querySelector('.status-message');
+
+            statusDiv.className = 'mt-4 p-4 rounded-md';
+            statusDiv.classList.add(type === 'error' ? 'bg-red-100' : 'bg-green-100');
+            statusIcon.textContent = type === 'error' ? 'error' : 'check_circle';
+            statusIcon.className = 'material-icons mr-2';
+            statusIcon.classList.add(type === 'error' ? 'text-red-500' : 'text-green-500');
+            statusMessage.textContent = message;
+            statusMessage.className = 'status-message';
+            statusMessage.classList.add(type === 'error' ? 'text-red-700' : 'text-green-700');
+            statusDiv.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
