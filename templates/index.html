@@ -195,22 +195,39 @@
                 const res = await fetch('https://autoreact-5q6n.onrender.com/react', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
                     },
                     body: JSON.stringify(payload)
                 });
 
+                // Check if the response is JSON
+                const contentType = res.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    throw new Error('Response was not JSON');
+                }
+
                 const data = await res.json();
+                
+                // Format the response with proper indentation
                 response.querySelector('pre').textContent = JSON.stringify(data, null, 2);
                 
+                // Style the response based on success/error
                 if (!res.ok) {
                     response.querySelector('pre').classList.add('text-red-400');
                 } else {
                     response.querySelector('pre').classList.remove('text-red-400');
+                    // Add success message class
+                    response.querySelector('pre').classList.add('text-green-400');
                 }
             } catch (error) {
-                response.querySelector('pre').textContent = error.message;
+                // Handle any errors that occurred during the request
+                response.querySelector('pre').textContent = `Error: ${error.message}`;
                 response.querySelector('pre').classList.add('text-red-400');
+                response.querySelector('pre').classList.remove('text-green-400');
+            } finally {
+                // Scroll the response into view
+                response.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
         });
     </script>
