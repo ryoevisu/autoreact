@@ -3,149 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facebook Reaction Tool</title>
+    <title>RyoBoosting - Auto React API</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#FE2C55',
+                        secondary: '#161823',
+                        dark: '#121212',
+                    },
+                }
+            }
+        }
+    </script>
     <style>
-        .reaction-btn {
-            transition: transform 0.2s;
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F8F8;
         }
-        .reaction-btn:hover {
-            transform: scale(1.1);
-        }
-        .loading {
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .gradient-text {
+            background: linear-gradient(45deg, #FE2C55, #4DE8F4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen">
-    <div class="container mx-auto px-4 py-8">
-        <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-6">
-            <h1 class="text-3xl font-bold text-center mb-8 text-blue-600">Facebook Reaction Tool</h1>
-            
-            <div class="space-y-6">
-                <!-- Cookie Input -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Facebook Cookie</label>
-                    <textarea id="cookie" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+<body class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <i data-feather="zap" class="w-6 h-6 text-primary"></i>
+                    <h1 class="text-2xl font-bold gradient-text">RyoBoosting</h1>
                 </div>
-
-                <!-- Link Input -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Facebook Post Link</label>
-                    <input type="text" id="link" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <div class="flex items-center space-x-4">
+                    <a href="#" class="text-gray-600 hover:text-primary">
+                        <i data-feather="github" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#" class="text-gray-600 hover:text-primary">
+                        <i data-feather="instagram" class="w-5 h-5"></i>
+                    </a>
                 </div>
+            </div>
+        </div>
+    </header>
 
-                <!-- Reaction Buttons -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-3">Select Reaction</label>
-                    <div class="flex flex-wrap gap-4 justify-center">
-                        <button class="reaction-btn p-2 rounded-full hover:bg-gray-100" data-reaction="LIKE">👍</button>
-                        <button class="reaction-btn p-2 rounded-full hover:bg-gray-100" data-reaction="LOVE">❤️</button>
-                        <button class="reaction-btn p-2 rounded-full hover:bg-gray-100" data-reaction="CARE">🤗</button>
-                        <button class="reaction-btn p-2 rounded-full hover:bg-gray-100" data-reaction="HAHA">😄</button>
-                        <button class="reaction-btn p-2 rounded-full hover:bg-gray-100" data-reaction="WOW">😮</button>
-                        <button class="reaction-btn p-2 rounded-full hover:bg-gray-100" data-reaction="SAD">😢</button>
-                        <button class="reaction-btn p-2 rounded-full hover:bg-gray-100" data-reaction="ANGRY">😠</button>
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden">
+            <!-- API Title Section -->
+            <div class="bg-gradient-to-r from-primary to-purple-600 p-8 text-white">
+                <h2 class="text-3xl font-bold mb-2">Auto React API</h2>
+                <p class="text-gray-100">Automate Facebook reactions with our powerful API</p>
+            </div>
+
+            <!-- API Documentation -->
+            <div class="p-8">
+                <div class="mb-8">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i data-feather="terminal" class="w-5 h-5 text-primary"></i>
+                        <h3 class="text-xl font-semibold">Endpoint</h3>
+                    </div>
+                    <div class="bg-gray-900 text-white p-4 rounded-lg font-mono text-sm">
+                        POST https://autoreact-5q6n.onrender.com/react
                     </div>
                 </div>
 
-                <!-- Submit Button -->
-                <button id="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center justify-center">
-                    <span class="material-icons mr-2">send</span>
-                    Submit Reaction
-                </button>
+                <!-- Parameters -->
+                <div class="mb-8">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i data-feather="list" class="w-5 h-5 text-primary"></i>
+                        <h3 class="text-xl font-semibold">Parameters</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Parameter</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Required</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">reaction</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">String</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Yes</td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">LIKE, LOVE, CARE, HAHA, WOW, SAD, ANGRY</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">cookie</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">String</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Yes</td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">Facebook authentication cookie</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">link</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">String</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Yes</td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">Facebook post URL</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-                <!-- Status Display -->
-                <div id="status" class="mt-4 p-4 rounded-md hidden">
-                    <div class="flex items-center">
-                        <span class="material-icons mr-2"></span>
-                        <span class="status-message"></span>
+                <!-- Try It Out Section -->
+                <div class="bg-gray-50 rounded-xl p-6">
+                    <div class="flex items-center space-x-2 mb-6">
+                        <i data-feather="play-circle" class="w-5 h-5 text-primary"></i>
+                        <h3 class="text-xl font-semibold">Try it out</h3>
+                    </div>
+                    <form id="reactForm" class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Reaction</label>
+                            <select id="reaction" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                                <option value="LIKE">LIKE</option>
+                                <option value="LOVE">LOVE</option>
+                                <option value="CARE">CARE</option>
+                                <option value="HAHA">HAHA</option>
+                                <option value="WOW">WOW</option>
+                                <option value="SAD">SAD</option>
+                                <option value="ANGRY">ANGRY</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Facebook Cookie</label>
+                            <input type="text" id="cookie" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Enter your Facebook cookie">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Facebook Post URL</label>
+                            <input type="url" id="link" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="https://facebook.com/...">
+                        </div>
+                        <button type="submit" class="w-full bg-primary text-white py-3 px-6 rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center space-x-2">
+                            <i data-feather="send" class="w-4 h-4"></i>
+                            <span>Send Request</span>
+                        </button>
+                    </form>
+                    <div id="response" class="mt-6 hidden">
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <pre class="text-white text-sm overflow-x-auto"></pre>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex flex-col items-center justify-center space-y-2">
+                <div class="flex items-center space-x-2">
+                    <i data-feather="code" class="w-4 h-4 text-gray-400"></i>
+                    <span class="text-gray-500">Powered by</span>
+                    <span class="font-semibold gradient-text">Ryo Evisu</span>
+                </div>
+                <div class="text-sm text-gray-400">© 2024 RyoBoosting. All rights reserved.</div>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        let selectedReaction = null;
+        // Initialize Feather Icons
+        feather.replace();
 
-        // Handle reaction button clicks
-        document.querySelectorAll('.reaction-btn').forEach(button => {
-            button.addEventListener('click', () => {
-                document.querySelectorAll('.reaction-btn').forEach(btn => {
-                    btn.classList.remove('ring-2', 'ring-blue-500');
-                });
-                button.classList.add('ring-2', 'ring-blue-500');
-                selectedReaction = button.dataset.reaction;
-            });
-        });
-
-        // Handle form submission
-        document.getElementById('submit').addEventListener('click', async () => {
-            const cookie = document.getElementById('cookie').value;
-            const link = document.getElementById('link').value;
-            const statusDiv = document.getElementById('status');
-            const statusIcon = statusDiv.querySelector('.material-icons');
-            const statusMessage = statusDiv.querySelector('.status-message');
-
-            if (!cookie || !link || !selectedReaction) {
-                showStatus('error', 'Please fill in all fields and select a reaction');
-                return;
-            }
+        // Form submission handler
+        document.getElementById('reactForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const response = document.getElementById('response');
+            response.style.display = 'block';
+            response.querySelector('pre').textContent = 'Sending request...';
+            
+            const payload = {
+                reaction: document.getElementById('reaction').value,
+                cookie: document.getElementById('cookie').value,
+                link: document.getElementById('link').value
+            };
 
             try {
-                // Show loading state
-                document.getElementById('submit').disabled = true;
-                document.getElementById('submit').innerHTML = '<span class="material-icons loading">refresh</span> Processing...';
-
-                const response = await fetch('/react', {
+                const res = await fetch('https://autoreact-5q6n.onrender.com/react', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        cookie,
-                        link,
-                        reaction: selectedReaction
-                    })
+                    body: JSON.stringify(payload)
                 });
 
-                const data = await response.json();
-
-                if (response.ok) {
-                    showStatus('success', 'Reaction submitted successfully!');
+                const data = await res.json();
+                response.querySelector('pre').textContent = JSON.stringify(data, null, 2);
+                
+                if (!res.ok) {
+                    response.querySelector('pre').classList.add('text-red-400');
                 } else {
-                    showStatus('error', data.error || 'An error occurred');
+                    response.querySelector('pre').classList.remove('text-red-400');
                 }
             } catch (error) {
-                showStatus('error', 'Network error occurred');
-            } finally {
-                // Reset submit button
-                document.getElementById('submit').disabled = false;
-                document.getElementById('submit').innerHTML = '<span class="material-icons mr-2">send</span> Submit Reaction';
+                response.querySelector('pre').textContent = error.message;
+                response.querySelector('pre').classList.add('text-red-400');
             }
         });
-
-        function showStatus(type, message) {
-            const statusDiv = document.getElementById('status');
-            const statusIcon = statusDiv.querySelector('.material-icons');
-            const statusMessage = statusDiv.querySelector('.status-message');
-
-            statusDiv.className = 'mt-4 p-4 rounded-md';
-            statusDiv.classList.add(type === 'error' ? 'bg-red-100' : 'bg-green-100');
-            statusIcon.textContent = type === 'error' ? 'error' : 'check_circle';
-            statusIcon.className = 'material-icons mr-2';
-            statusIcon.classList.add(type === 'error' ? 'text-red-500' : 'text-green-500');
-            statusMessage.textContent = message;
-            statusMessage.className = 'status-message';
-            statusMessage.classList.add(type === 'error' ? 'text-red-700' : 'text-green-700');
-            statusDiv.classList.remove('hidden');
-        }
     </script>
 </body>
 </html>
